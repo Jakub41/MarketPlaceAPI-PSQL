@@ -1,9 +1,10 @@
+const { Queries } = require("../helpers/queries");
 const { query } = require("../db/dbConnect");
 
 const Product = {
     async readAll(req, res) {
         try {
-            const products = await query("SELECT * FROM products");
+            const products = await Queries.findAll("products");
             if (products.rowCount === 0)
                 return res.status(404).json({
                     msg: "No records from DB"
@@ -16,10 +17,8 @@ const Product = {
 
     async getOne(req, res) {
         try {
-            const product = await query(
-                `SELECT * FROM products where _id = $1`,
-                [req.params.id]
-            );
+            const product = await Queries.findOne("products", "_id", req.params.id);
+
             if (product.rowCount === 0)
                 return res.status(404).json({
                     msg: "Product not found",
