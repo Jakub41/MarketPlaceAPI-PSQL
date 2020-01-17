@@ -6,5 +6,6 @@ router.get("/", Product.readAll);
 router.get("/:id", Product.getOne);
 router.post("/", Product.createOne);
 router.put("/:id", Product.updateOne);
+router.delete("/:id", Product.deleteOne);
 
 module.exports = router;

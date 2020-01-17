@@ -85,7 +85,29 @@ const Product = {
                 ]
             );
             res.json({ msg: "Product updated", data: update.rows });
+        } catch (err) {
+            return res.json({ msg: "PUT Something went wrong!", err: err });
+        }
+    },
 
+    async deleteOne(req, res) {
+        try {
+            const findOneProduct = await query(
+                `SELECT * FROM products where _id = $1`,
+                [req.params.id]
+            );
+            if (findOneProduct.rowCount === 0)
+                return res.status(404).json({
+                    msg: "Product not found",
+                    product: req.params.id
+                });
+
+            await query(
+                `DElETE FROM products
+                    WHERE _id=$1 returning *`,
+                [req.params.id]
+            );
+            res.json({ msg: "Product deleted", data: req.params.id });
         } catch (err) {
             return res.json({ msg: "PUT Something went wrong!", err: err });
         }
