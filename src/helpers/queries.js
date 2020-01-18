@@ -9,14 +9,13 @@ const Queries = {
         return query(`SELECT * FROM ${table} where ${id} = $1`, [params]);
     },
 
-    insertOne(table, values, params) {
-        const arr1 = [...values];
-        const arr2 = [params];
+    insertOne(table, columns, params) {
         return query(
             `INSERT INTO ${table}
-                        (${arr1})
+                        (${columns})
                         VALUES ($1, $2, $3, $4, $5, $6)
-                        RETURNING*`, [arr2]
+                        RETURNING*`,
+            params
         );
     }
 };
