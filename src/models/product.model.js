@@ -17,7 +17,11 @@ const Product = {
 
     async getOne(req, res) {
         try {
-            const product = await Queries.findOne("products", "_id", req.params.id);
+            const product = await Queries.findOne(
+                "products",
+                "_id",
+                req.params.id
+            );
 
             if (product.rowCount === 0)
                 return res.status(404).json({
@@ -36,11 +40,16 @@ const Product = {
     async createOne(req, res) {
         console.log({ ...req.body });
         try {
-            const product = await query(
-                `INSERT INTO products
-                    (productname, description, brand, price, category, imageurl)
-                VALUES ($1, $2, $3, $4, $5, $6)
-                RETURNING*`,
+            const product = await Queries.insertOne(
+                "products",
+                [
+                    "productname",
+                    "description",
+                    "brand",
+                    "price",
+                    "category",
+                    "imageurl"
+                ],
                 [
                     req.body.productname,
                     req.body.description,
