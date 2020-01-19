@@ -13,11 +13,21 @@ const Queries = {
         return query(
             `INSERT INTO ${table}
                         (${columns})
-                        VALUES ($1, $2, $3, $4, $5, $6)
+                        VALUES (${createValuesIds(params)})
                         RETURNING*`,
             params
         );
     }
+};
+
+// Return a comma delimited $n for each element in the params array
+// Calling it with something like createValuesIds(['a','b','c','d','e','f']) returns $1, $2, $3, $4, $5, $6
+const createValuesIds = (vals) => {
+    let ids = '';
+    for (let i = 0; i < vals.length; i++) {
+      ids += i === 0 ? '$1' : `, $${i + 1}`;
+    }
+    return ids;
 };
 
 module.exports = { Queries };
