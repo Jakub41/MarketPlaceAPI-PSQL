@@ -100,9 +100,10 @@ const Product = {
 
     async deleteOne(req, res) {
         try {
-            const findOneProduct = await query(
-                `SELECT * FROM products where _id = $1`,
-                [req.params.id]
+            const findOneProduct = await Queries.findOne(
+                "products",
+                "_id",
+                req.params.id
             );
             if (findOneProduct.rowCount === 0)
                 return res.status(404).json({
@@ -110,14 +111,10 @@ const Product = {
                     product: req.params.id
                 });
 
-            await query(
-                `DElETE FROM products
-                    WHERE _id=$1 returning *`,
-                [req.params.id]
-            );
+            await Queries.deleteOne("products", "_id", req.params.id);
             res.json({ msg: "Product deleted", data: req.params.id });
         } catch (err) {
-            return res.json({ msg: "PUT Something went wrong!", err: err });
+            return res.json({ msg: "DELETE Something went wrong!", err: err });
         }
     }
 };
